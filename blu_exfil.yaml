@@ -1,0 +1,50 @@
+title: Suspicious Bluetooth-Based Exfiltration Behavior Chain (Windows)
+id: xxxx
+description: Detects confirmed Bluetooth activity (e.g., device pairing and file transfer) combined with suspicious behaviors (clipboard access, large file access, USB blocking, or network disabling).
+author: Anant Jain
+logsource:
+  product: windows
+detection:
+  bluetooth_registry_mod:
+    TargetObject|contains:
+      - 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHPORT\\Parameters\\Devices'
+      - 'HKCU\\Software\\Microsoft\\Bluetooth\\DeviceCache'
+
+  fsquirt_execution:
+    Image|endswith: '\fsquirt.exe'
+
+  clipboard_access:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\cmd.exe'
+    CommandLine|contains:
+      - 'Get-Clipboard'
+      - 'clip.exe'
+
+  large_file_access:
+    Image|endswith:
+      - '\explorer.exe'
+      - '\notepad.exe'
+    CommandLine|contains:
+      - '.zip'
+      - '.docx'
+      - '.pdf'
+
+  usb_storage_block:
+    TargetObject|contains: 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBSTOR'
+    EventType: SetValue
+
+  network_disable:
+    Image|endswith: '\netsh.exe'
+    CommandLine|contains:
+      - 'interface set interface'
+      - 'disable'
+
+  condition: bluetooth_registry_mod and fsquirt_execution and (clipboard_access or large_file_access or usb_storage_block or network_disable)
+level: high
+tags:
+  - attack.exfiltration
+  - attack.t1052.001
+  - attack.t1112
+  - attack.t1056.001
+  - threat_hunting
