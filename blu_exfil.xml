@@ -1,0 +1,29 @@
+<Sysmon schemaversion="4.60">
+  <EventFiltering>
+  
+    <!-- Process Creation (Event ID 1) -->
+    <ProcessCreate onmatch="include">
+      <Image condition="end with">fsquirt.exe</Image>
+      <Image condition="end with">powershell.exe</Image>
+      <Image condition="end with">cmd.exe</Image>
+      <Image condition="end with">explorer.exe</Image>
+      <Image condition="end with">notepad.exe</Image>
+      <Image condition="end with">netsh.exe</Image>
+      <CommandLine condition="contains">Get-Clipboard</CommandLine>
+      <CommandLine condition="contains">clip.exe</CommandLine>
+      <CommandLine condition="contains">.zip</CommandLine>
+      <CommandLine condition="contains">.docx</CommandLine>
+      <CommandLine condition="contains">.pdf</CommandLine>
+      <CommandLine condition="contains">interface set interface</CommandLine>
+      <CommandLine condition="contains">disable</CommandLine>
+    </ProcessCreate>
+    
+    <!-- Registry Modification (Event ID 13 - SetValue, Event ID 12 - CreateKey) -->
+    <RegistryEvent onmatch="include">
+      <TargetObject condition="contains">BTHPORT\\Parameters\\Devices</TargetObject>
+      <TargetObject condition="contains">Bluetooth\\DeviceCache</TargetObject>
+      <TargetObject condition="contains">USBSTOR</TargetObject>
+    </RegistryEvent>
+    
+  </EventFiltering>
+</Sysmon>
