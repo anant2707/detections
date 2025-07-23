@@ -1,0 +1,17 @@
+How can we detect:
+1. Bluetooth device connections
+2. Bluetooth file transfers (OBEX protocol)
+3. Unusual usage of fsquirt.exe (Windows Bluetooth File Transfer Wizard)
+4. Execution of Bluetooth-related commands/utilities (like bluetoothctl, btmon in Linux)
+
+Common Registry Paths Modified During Bluetooth Events
+
+Purpose	Registry Path
+
+Bluetooth device pairing	HKLM\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices\
+Bluetooth device services	HKLM\SYSTEM\CurrentControlSet\Services\BthEnum\
+Installed Bluetooth driver	HKLM\SYSTEM\CurrentControlSet\Services\BTHUSB\
+Device metadata	HKLM\SYSTEM\CurrentControlSet\Enum\BTHENUM\
+Paired devices (user level)	HKCU\Software\Microsoft\Bluetooth\DeviceCache\
+Bluetooth settings	HKLM\SOFTWARE\Microsoft\Bluetooth or HKCU\SOFTWARE\Microsoft\Bluetooth
+
